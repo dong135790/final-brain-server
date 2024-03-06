@@ -8,13 +8,22 @@ const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
+const cool = require('cool-ascii-faces')
+const express = require('express')
+const path = require('path')
+
+const PORT = process.env.PORT || 5001
 
 const db = knex({
   // connect to your own database here:
   client: 'pg',
   connection: {
     connectionString: process.env.DATABASE_URL,
-    ssl: true,
+    ssl: {rejectUnauthorized: false},
+    port: 5432,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PW,
+    database: process.env.DATABASE_DB
   }
 });
 
@@ -23,7 +32,7 @@ const app = express();
 
 app.use(cors())
 app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
-
+app.use
 app.get('/', (req, res)=> { res.send("it is working!") })
 app.post('/signin', signin.handleSignin(db, bcrypt))
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
